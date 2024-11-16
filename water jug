@@ -1,0 +1,39 @@
+def gcd(a,b):
+    while b!=0:
+        a,b=b,a%b
+    return a
+
+def is_solvable(x,y,z):
+    if z>x or z>y:
+        return False
+    return z%gcd(x,y)==0
+
+def water_jug_solution(x,y,z):
+    if not is_solvable(x,y,z):
+        return "no solution exists"
+    queue=[(0,0)]
+    visited=[]
+    
+    while queue:
+        a,b=queue.pop(0)
+        if a==z or b==z:
+            return f"solution is ({a},{b})"
+        
+        if (a,b) in visited:
+            continue
+
+        visited.append((a,b))
+        queue.append((a,y))
+        queue.append((x,b))
+        queue.append((a,0))
+        queue.append((0,b))
+        pour_to_b=min(a, y-b)
+        queue.append((a-pour_to_b, b+pour_to_b))
+        pour_to_a=min((x-a,b))
+        queue.append((a+pour_to_a, b-pour_to_a))
+    return "no solution found"
+
+x=4
+y=3
+z=2
+print(water_jug_solution(x,y,z))
